@@ -18,7 +18,6 @@ class Config:
     # API Keys
     openai_api_key: Optional[str] = os.getenv("OPENAI_API_KEY")
     anthropic_api_key: Optional[str] = os.getenv("ANTHROPIC_API_KEY")
-    voyage_api_key: Optional[str] = os.getenv("VOYAGE_API_KEY")
     
     # Paths
     project_root: Path = Path(__file__).parent.parent

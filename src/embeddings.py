@@ -1,32 +1,32 @@
-"""Embeddings module using Voyage AI."""
+"""Embeddings module using OpenAI."""
 
 import os
 from typing import List, Optional
-import voyageai
+from openai import OpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-class VoyageEmbeddings:
-    """Wrapper for Voyage AI embeddings."""
+class OpenAIEmbeddings:
+    """Wrapper for OpenAI embeddings."""
     
-    def __init__(self, api_key: Optional[str] = None, model: str = "voyage-2"):
+    def __init__(self, api_key: Optional[str] = None, model: str = "text-embedding-ada-002"):
         """
-        Initialize Voyage AI embeddings.
+        Initialize OpenAI embeddings.
         
         Args:
-            api_key: Voyage AI API key. If None, reads from VOYAGE_API_KEY env var.
-            model: Model to use for embeddings (voyage-2, voyage-large-2, etc.)
+            api_key: OpenAI API key. If None, reads from OPENAI_API_KEY env var.
+            model: Model to use for embeddings (text-embedding-ada-002, text-embedding-3-small, etc.)
         """
-        self.api_key = api_key or os.getenv("VOYAGE_API_KEY")
+        self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         if not self.api_key:
-            raise ValueError("Voyage API key not provided. Set VOYAGE_API_KEY environment variable.")
+            raise ValueError("OpenAI API key not provided. Set OPENAI_API_KEY environment variable.")
         
-        self.client = voyageai.Client(api_key=self.api_key)
+        self.client = OpenAI(api_key=self.api_key)
         self.model = model
-        logger.info(f"Initialized Voyage embeddings with model: {model}")
+        logger.info(f"Initialized OpenAI embeddings with model: {model}")
     
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
@@ -44,14 +44,13 @@ class VoyageEmbeddings:
         
         logger.debug(f"Embedding {len(texts)} documents")
         
-        # Voyage AI can handle batches efficiently
-        result = self.client.embed(
-            texts=texts,
-            model=self.model,
-            input_type="document"  # Optimized for document storage
+        # OpenAI can handle batches efficiently
+        response = self.client.embeddings.create(
+            input=texts,
+            model=self.model
         )
         
-        embeddings = result.embeddings
+        embeddings = [data.embedding for data in response.data]
         logger.debug(f"Generated {len(embeddings)} embeddings")
         return embeddings
     
@@ -68,21 +67,20 @@ class VoyageEmbeddings:
         """
         logger.debug(f"Embedding query: {query[:100]}...")
         
-        result = self.client.embed(
-            texts=[query],
-            model=self.model,
-            input_type="query"  # Optimized for search queries
+        response = self.client.embeddings.create(
+            input=[query],
+            model=self.model
         )
         
-        return result.embeddings[0]
+        return response.data[0].embedding
     
-    def embed_batch(self, texts: List[str], batch_size: int = 8) -> List[List[float]]:
+    def embed_batch(self, texts: List[str], batch_size: int = 100) -> List[List[float]]:
         """
         Embed texts in batches to handle large datasets.
         
         Args:
             texts: List of texts to embed.
-            batch_size: Number of texts to embed at once.
+            batch_size: Number of texts to embed at once (OpenAI allows up to 2048).
             
         Returns:
             List of embedding vectors.

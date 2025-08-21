@@ -8,7 +8,7 @@ import logging
 from pathlib import Path
 import uuid
 
-from src.embeddings import VoyageEmbeddings
+from src.embeddings import OpenAIEmbeddings
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ class VectorStore:
         self,
         collection_name: str = "rag_documents",
         persist_directory: Optional[str] = None,
-        embeddings: Optional[VoyageEmbeddings] = None
+        embeddings: Optional[OpenAIEmbeddings] = None
     ):
         """
         Initialize vector store.
@@ -30,7 +30,7 @@ class VectorStore:
             persist_directory: Directory to persist the database.
             embeddings: Embeddings instance to use.
         """
-        self.embeddings = embeddings or VoyageEmbeddings()
+        self.embeddings = embeddings or OpenAIEmbeddings()
         
         # Set up persistence directory
         if persist_directory is None:

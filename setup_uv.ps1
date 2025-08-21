@@ -54,7 +54,7 @@ if (-Not (Test-Path ".\.env")) {
         Copy-Item .env.example .env
         Write-Host "[INFO] Created .env file. Please add your API keys:" -ForegroundColor Yellow
         Write-Host "   - ANTHROPIC_API_KEY" -ForegroundColor Cyan
-        Write-Host "   - VOYAGE_API_KEY" -ForegroundColor Cyan
+        Write-Host "   - OPENAI_API_KEY" -ForegroundColor Cyan
     }
 } else {
     Write-Host ""

@@ -1,6 +1,6 @@
-# RAG Pipeline with Anthropic Claude & Voyage AI
+# RAG Pipeline with Anthropic Claude & OpenAI
 
-A production-ready Retrieval-Augmented Generation (RAG) system using Anthropic's Claude for generation and Voyage AI for semantic embeddings.
+A production-ready Retrieval-Augmented Generation (RAG) system using Anthropic's Claude for generation and OpenAI for semantic embeddings.
 
 ## Overview
 
@@ -43,7 +43,7 @@ This will:
 3. Add your API keys to `.env`:
 ```bash
 ANTHROPIC_API_KEY=your_key_here
-VOYAGE_API_KEY=your_key_here
+OPENAI_API_KEY=your_key_here
 ```
 
 ### Alternative: Manual UV Setup
@@ -146,7 +146,7 @@ uv run mypy src
 ## Features
 
 - 🚀 **Fast & Scalable**: Uses ChromaDB for efficient vector storage
-- 🎯 **Accurate**: Voyage AI embeddings for precise semantic search
+- 🎯 **Accurate**: OpenAI embeddings for precise semantic search
 - 💬 **Intelligent**: Claude 3 for high-quality response generation
 - 📚 **Flexible**: Support for text and markdown documents
 - 🔧 **Configurable**: Adjustable chunk sizes, overlap, and retrieval settings
@@ -155,7 +155,7 @@ uv run mypy src
 ## API Keys Required
 
 1. **Anthropic API Key**: Get it at [console.anthropic.com](https://console.anthropic.com/)
-2. **Voyage AI API Key**: Get it at [voyageai.com](https://www.voyageai.com/)
+2. **OpenAI API Key**: Get it at [platform.openai.com](https://platform.openai.com/)
 
 ## Next Steps
 

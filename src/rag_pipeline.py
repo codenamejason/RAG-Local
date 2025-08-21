@@ -1,4 +1,4 @@
-"""Main RAG pipeline using Anthropic Claude and Voyage AI."""
+"""Main RAG pipeline using Anthropic Claude and OpenAI embeddings."""
 
 import os
 from typing import List, Dict, Any, Optional, Tuple
@@ -8,7 +8,7 @@ import logging
 from dataclasses import dataclass
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-from src.embeddings import VoyageEmbeddings
+from src.embeddings import OpenAIEmbeddings
 from src.vector_store import VectorStore
 from src.chunking import TextChunker, MarkdownChunker, Chunk
 
@@ -26,12 +26,12 @@ class RAGResponse:
 
 
 class RAGPipeline:
-    """Complete RAG pipeline with Anthropic and Voyage AI."""
+    """Complete RAG pipeline with Anthropic and OpenAI."""
     
     def __init__(
         self,
         anthropic_api_key: Optional[str] = None,
-        voyage_api_key: Optional[str] = None,
+        openai_api_key: Optional[str] = None,
         model: str = "claude-3-haiku-20240307",
         collection_name: str = "rag_documents",
         chunk_size: int = 512,
@@ -42,7 +42,7 @@ class RAGPipeline:
         
         Args:
             anthropic_api_key: Anthropic API key.
-            voyage_api_key: Voyage AI API key.
+            openai_api_key: OpenAI API key.
             model: Claude model to use.
             collection_name: Name for vector store collection.
             chunk_size: Size of text chunks.
@@ -50,18 +50,18 @@ class RAGPipeline:
         """
         # API keys
         self.anthropic_api_key = anthropic_api_key or os.getenv("ANTHROPIC_API_KEY")
-        self.voyage_api_key = voyage_api_key or os.getenv("VOYAGE_API_KEY")
+        self.openai_api_key = openai_api_key or os.getenv("OPENAI_API_KEY")
         
         if not self.anthropic_api_key:
             raise ValueError("Anthropic API key not provided. Set ANTHROPIC_API_KEY.")
-        if not self.voyage_api_key:
-            raise ValueError("Voyage API key not provided. Set VOYAGE_API_KEY.")
+        if not self.openai_api_key:
+            raise ValueError("OpenAI API key not provided. Set OPENAI_API_KEY.")
         
         # Initialize components
         self.anthropic = Anthropic(api_key=self.anthropic_api_key)
         self.model = model
         
-        self.embeddings = VoyageEmbeddings(api_key=self.voyage_api_key)
+        self.embeddings = OpenAIEmbeddings(api_key=self.openai_api_key)
         self.vector_store = VectorStore(
             collection_name=collection_name,
             embeddings=self.embeddings
