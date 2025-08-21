@@ -2,6 +2,8 @@
 
 A production-ready Retrieval-Augmented Generation (RAG) system using Anthropic's Claude for generation and OpenAI for semantic embeddings.
 
+Built with modern Python tooling using `uv` for 10-100x faster package management than pip.
+
 ## Overview
 
 This project implements a complete RAG pipeline that allows you to:
@@ -66,23 +68,36 @@ uv pip install -e ".[dev]"
 
 ## Usage
 
-### Quick Start with UV
+### Quick Start
 
-1. **Run the example:**
+1. **Set up the environment:**
+```bash
+.\setup_uv.ps1  # Windows PowerShell
+# or
+./setup_uv.sh    # Linux/Mac
+```
+
+2. **Add your API keys to `.env`:**
+```env
+ANTHROPIC_API_KEY=sk-ant-...
+OPENAI_API_KEY=sk-...
+```
+
+3. **Run the example:**
 ```bash
 uv run rag-example
-# or use the helper script
+# or
 .\run_with_uv.ps1 example  # Windows
 ```
 
-2. **Interactive CLI:**
+4. **Try the interactive CLI:**
 ```bash
 uv run rag-cli
 # or
 .\run_with_uv.ps1 cli  # Windows
 ```
 
-3. **Jupyter notebook:**
+5. **Explore with Jupyter:**
 ```bash
 uv run jupyter notebook rag_example.ipynb
 # or
@@ -154,8 +169,8 @@ uv run mypy src
 
 ## API Keys Required
 
-1. **Anthropic API Key**: Get it at [console.anthropic.com](https://console.anthropic.com/)
-2. **OpenAI API Key**: Get it at [platform.openai.com](https://platform.openai.com/)
+1. **Anthropic API Key**: Get it at [console.anthropic.com](https://console.anthropic.com/) - For Claude text generation
+2. **OpenAI API Key**: Get it at [platform.openai.com](https://platform.openai.com/) - For embeddings
 
 ## Next Steps
 

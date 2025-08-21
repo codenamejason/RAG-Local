@@ -241,10 +241,18 @@ Please provide a comprehensive answer based on the context provided. If the cont
     
     def get_stats(self) -> Dict[str, Any]:
         """Get statistics about the RAG system."""
-        return {
+        stats = {
             "total_documents": self.vector_store.get_document_count(),
             "model": self.model,
             "chunk_size": self.text_chunker.chunk_size,
             "chunk_overlap": self.text_chunker.chunk_overlap,
-            "embedding_model": self.embeddings.model
+            "embedding_model": self.embeddings.model,
+            "vector_store_type": type(self.vector_store).__name__
         }
+        
+        # Add vector store specific stats
+        if hasattr(self.vector_store, 'get_stats'):
+            vector_stats = self.vector_store.get_stats()
+            stats.update(vector_stats)
+            
+        return stats
