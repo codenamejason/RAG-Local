@@ -8,17 +8,16 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
 class OpenAIEmbeddings:
     """Wrapper for OpenAI embeddings."""
     
-    def __init__(self, api_key: Optional[str] = None, model: str = "text-embedding-ada-002"):
+    def __init__(self, api_key: Optional[str] = None, model: str = "text-embedding-3-small"):
         """
         Initialize OpenAI embeddings.
         
         Args:
             api_key: OpenAI API key. If None, reads from OPENAI_API_KEY env var.
-            model: Model to use for embeddings (text-embedding-ada-002, text-embedding-3-small, etc.)
+            model: Model to use for embeddings (text-embedding-3-small, text-embedding-3-small, etc.)
         """
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         if not self.api_key:

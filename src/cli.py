@@ -18,7 +18,6 @@ logging.basicConfig(
     format="%(message)s"
 )
 
-
 class RAGCLI:
     """Interactive command-line interface for RAG system."""
     

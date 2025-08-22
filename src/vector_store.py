@@ -12,7 +12,6 @@ from src.embeddings import OpenAIEmbeddings
 
 logger = logging.getLogger(__name__)
 
-
 class VectorStore:
     """ChromaDB-based vector store for RAG."""
     

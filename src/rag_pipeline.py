@@ -199,7 +199,7 @@ class RAGPipeline:
         
         # Prepare system prompt
         if system_prompt is None:
-            system_prompt = """You are a helpful AI assistant with access to a knowledge base. 
+            system_prompt = """You are a helpful AI assistant with access to a document knowledge base. 
             Use the provided context to answer questions accurately. 
             If the context doesn't contain relevant information, say so clearly.
             Always cite which context section(s) you're using in your answer."""

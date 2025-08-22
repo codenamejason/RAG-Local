@@ -14,10 +14,40 @@ try {
     # Install uv using PowerShell
     Invoke-RestMethod https://astral.sh/uv/install.ps1 | Invoke-Expression
     
-    # Refresh PATH
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+    # Wait a moment for installation to complete
+    Start-Sleep -Seconds 2
     
-    Write-Host "[OK] uv installed successfully!" -ForegroundColor Green
+    # Check if UV was installed to .local/bin (common location)
+    $uvPath = "$env:USERPROFILE\.local\bin\uv.exe"
+    if (Test-Path $uvPath) {
+        Write-Host "[INFO] UV installed to: $uvPath" -ForegroundColor Yellow
+        
+        # Add to current session PATH
+        $env:PATH += ";$env:USERPROFILE\.local\bin"
+        
+        # Add to user PATH permanently
+        try {
+            $userPath = [Environment]::GetEnvironmentVariable("PATH", "User")
+            if ($userPath -notlike "*$env:USERPROFILE\.local\bin*") {
+                [Environment]::SetEnvironmentVariable("PATH", "$userPath;$env:USERPROFILE\.local\bin", "User")
+                Write-Host "[OK] Added UV to permanent PATH" -ForegroundColor Green
+            }
+        } catch {
+            Write-Host "[WARNING] Could not add to permanent PATH. You may need to run this as Administrator." -ForegroundColor Yellow
+        }
+        
+        # Verify UV is now accessible
+        try {
+            $uvVersion = uv --version 2>$null
+            Write-Host "[OK] UV is now accessible: $uvVersion" -ForegroundColor Green
+        } catch {
+            Write-Host "[ERROR] UV installed but not accessible. Try restarting PowerShell." -ForegroundColor Red
+            exit 1
+        }
+    } else {
+        Write-Host "[ERROR] UV installation failed or installed to unexpected location" -ForegroundColor Red
+        exit 1
+    }
 }
 
 # Create virtual environment with uv
@@ -72,3 +102,6 @@ Write-Host "3. Or run: uv run rag-cli" -ForegroundColor White
 Write-Host ""
 Write-Host "To activate the environment manually:" -ForegroundColor Gray
 Write-Host "   .\.venv\Scripts\activate" -ForegroundColor Gray
+Write-Host ""
+Write-Host "💡 UV is now in your PATH permanently!" -ForegroundColor Green
+Write-Host "   If you open a new PowerShell window, UV will work immediately." -ForegroundColor Gray
