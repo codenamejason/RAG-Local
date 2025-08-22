@@ -43,31 +43,44 @@ class RAGCLI:
         print("🤖 RAG System Interactive CLI")
         print("="*60)
         print("Type 'help' for commands or 'init' to start")
+        print("💡 You can also ask questions directly!")
         print()
         
         # Auto-initialize if API keys are available
-        if os.getenv("ANTHROPIC_API_KEY") and os.getenv("VOYAGE_API_KEY"):
+        if os.getenv("ANTHROPIC_API_KEY") and os.getenv("OPENAI_API_KEY"):
             self.init_rag()
         else:
             print("⚠️  API keys not found. Use 'init' to configure.")
+            print("   Required: ANTHROPIC_API_KEY and OPENAI_API_KEY")
         
         while True:
             try:
-                command = input("\n> ").strip().lower()
+                user_input = input("\n> ").strip()
                 
-                if not command:
+                if not user_input:
                     continue
                 
-                # Parse command and arguments
-                parts = command.split(maxsplit=1)
-                cmd = parts[0]
+                # Check if it's a command first
+                if user_input.lower() in self.commands:
+                    self.commands[user_input.lower()]("")
+                    continue
+                
+                # Check if it starts with a command
+                parts = user_input.split(maxsplit=1)
+                cmd = parts[0].lower()
                 args = parts[1] if len(parts) > 1 else ""
                 
-                # Execute command
+                # Execute command if recognized
                 if cmd in self.commands:
                     self.commands[cmd](args)
                 else:
-                    print(f"❌ Unknown command: {cmd}. Type 'help' for commands.")
+                    # If no command recognized, treat as a natural language query
+                    if self.rag:
+                        print("🤔 I'll treat that as a question. Let me search the knowledge base...")
+                        self.query(user_input)
+                    else:
+                        print("❌ RAG system not initialized. Use 'init' first.")
+                        print("💡 Or type 'help' to see available commands.")
                     
             except KeyboardInterrupt:
                 print("\n\n👋 Goodbye!")
@@ -89,10 +102,17 @@ class RAGCLI:
   help          - Show this help message
   exit          - Exit the CLI (alias: quit)
 
-Examples:
+💡 Natural Language:
+  You can also just type questions directly!
+  Examples:
+  > What is machine learning?
+  > Tell me about RAG systems
+  > How does this work?
+
+📁 File Commands:
   > add Machine learning is a subset of AI
-  > query What is machine learning?
   > addfile documents/info.txt
+  > query What is RAG?
         """
         print(help_text)
     
@@ -104,9 +124,11 @@ Examples:
             # Check for API keys
             if not os.getenv("ANTHROPIC_API_KEY"):
                 print("❌ ANTHROPIC_API_KEY not found in environment")
+                print("   Get it from: https://console.anthropic.com/")
                 return
-            if not os.getenv("VOYAGE_API_KEY"):
-                print("❌ VOYAGE_API_KEY not found in environment")
+            if not os.getenv("OPENAI_API_KEY"):
+                print("❌ OPENAI_API_KEY not found in environment")
+                print("   Get it from: https://platform.openai.com/api-keys")
                 return
             
             self.rag = RAGPipeline(

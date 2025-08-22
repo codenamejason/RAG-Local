@@ -1,0 +1,18 @@
+RAG (Retrieval-Augmented Generation) is a powerful AI technique that combines the best of both worlds: information retrieval and text generation.
+
+Key Components:
+1. Retrieval: The system searches through a knowledge base to find relevant information
+2. Augmentation: The retrieved information is used to enhance the AI's response
+3. Generation: The AI generates a comprehensive answer based on the retrieved context
+
+Benefits:
+- More accurate and up-to-date responses
+- Ability to cite sources and provide evidence
+- Reduced hallucination compared to pure language models
+- Can work with domain-specific knowledge
+
+This system uses:
+- OpenAI embeddings for semantic search
+- ChromaDB for vector storage
+- Claude 3 Haiku for text generation
+- Smart document chunking with overlap
