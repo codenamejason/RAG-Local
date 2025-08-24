@@ -25,9 +25,9 @@ def main():
     logger.info("Initializing RAG pipeline...")
     rag = RAGPipeline(
         model="claude-3-haiku-20240307",  # Fast and cost-effective
-        chunk_size=512,
-        chunk_overlap=50
-    )
+            chunk_size=512, # 512 is the default
+            chunk_overlap=100 # 50 is the default
+        )
     
     # Clear any existing data (for demo purposes)
     rag.clear_knowledge_base()
@@ -148,8 +148,12 @@ def main():
         print("="*80)
         
         # Get response
+        print("Getting response...")
+        # top_k is the number of chunks to retrieve
         response = rag.query(query, top_k=3)
+        print("Response received.")
         
+        print("Printing answer...")
         print(f"\nANSWER:\n{response.answer}")
         
         print(f"\nSOURCES (Top {len(response.sources)}):")
@@ -160,7 +164,9 @@ def main():
     print("\n" + "="*80)
     print("RAG SYSTEM STATISTICS")
     print("="*80)
+
     stats = rag.get_stats()
+    
     for key, value in stats.items():
         print(f"{key}: {value}")
 

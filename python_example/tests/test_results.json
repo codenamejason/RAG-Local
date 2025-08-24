@@ -1,0 +1,47 @@
+{
+  "timestamp": "2025-08-24 18:18:20",
+  "environment": {
+    "ollama": true,
+    "openai_key": true,
+    "anthropic_key": true,
+    "cuda": false
+  },
+  "results": [
+    {
+      "name": "Local RAG (Ollama + LanceDB)",
+      "status": "PASS",
+      "duration": 22.125693559646606,
+      "cost": 0.0,
+      "output": "=====================================================\nYour OLD setup (OpenAI + Anthropic):\n  Embeddings: $0.39/month\n  Generation: $0.75/month\n  TOTAL: $1.14/month ($13.68/year)\n\nYour NEW setup (Local):\n  Embeddings: $0.00/month\n  Generation: $0.00/month\n  TOTAL: $0.00/month ($0.00/year)\n\nSAVINGS: $1.14/month ($13.68/year)\nThat's a 100% reduction!\nModel nomic-embed-text not found. Available models: ['tinyllama:latest', 'mixtral:latest', 'llama2:13b', 'mistral:latest', 'nomic-embed-text:latest']\n"
+    },
+    {
+      "name": "OpenAI Integration",
+      "status": "FAIL",
+      "duration": 22.09872031211853,
+      "cost": 7.9e-05,
+      "output": "sed BadRequestError>]\n  [FAIL] Vector Store: FAIL\n\n>> Testing Full RAG Pipeline with OpenAI...\n  [FAIL] RAG pipeline test failed: RetryError[<Future at 0x1bc389d5050 state=finished raised TypeError>]\n  [FAIL] Full Pipeline: FAIL\n\n============================================================\n=== Test Summary\n============================================================\n[OK] Passed: 3\n[FAIL] Failed: 2\n[SKIP]  Skipped: 0\nCost: Total Cost: $0.000079\n\n[WARN]  Some tests failed. Check the output above.\n"
+    },
+    {
+      "name": "Anthropic Integration",
+      "status": "FAIL",
+      "duration": 3.861562728881836,
+      "cost": 0.000408,
+      "output": "] Full response: 1...2...3...4...5....\n  [OK] Streaming: PASS ($0.000162)\n\n\ud83d\udccf Testing Claude Context Window...\n  [OK] Input tokens: 618\n  [OK] Output tokens: 5\n  [OK] Summary: Test document\n  [OK] Context Window: PASS ($0.000161)\n\n============================================================\n=== Test Summary\n============================================================\n[OK] Passed: 4\n[FAIL] Failed: 1\n[SKIP]  Skipped: 0\nCost: Total Cost: $0.000408\n\n[WARN]  Some tests failed. Check the output above.\n"
+    },
+    {
+      "name": "Hybrid Configurations",
+      "status": "FAIL",
+      "duration": 32.453837156295776,
+      "cost": 0.0,
+      "output": "r balance: Use local embeddings + Claude Haiku\n  4. For speed: Use local everything with smaller models\nFailed to generate embedding: {\"error\":\"json: cannot unmarshal object into Go struct field EmbeddingRequest.prompt of type string\"}\nFailed to generate embedding: {\"error\":\"json: cannot unmarshal object into Go struct field EmbeddingRequest.prompt of type string\"}\nFailed to generate embedding: {\"error\":\"json: cannot unmarshal object into Go struct field EmbeddingRequest.prompt of type string\"}\n"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 3,
+    "skipped": 0,
+    "errors": 0,
+    "total_cost": 0.000487,
+    "total_duration": 80.53981375694275
+  }
+}

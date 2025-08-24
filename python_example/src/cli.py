@@ -29,7 +29,7 @@ class RAGCLI:
             "init": self.init_rag,
             "add": self.add_document,
             "addfile": self.add_file,
-            "query": self.query,
+            "query": self.query,  
             "ask": self.query,  # alias
             "stats": self.show_stats,
             "clear": self.clear_kb,

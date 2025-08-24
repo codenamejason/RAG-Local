@@ -1,0 +1,24 @@
+# Pure Local RAG Requirements
+# No API dependencies, no cloud services
+
+# Core
+lancedb>=0.5.0
+pyarrow>=14.0.0
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Local Embeddings
+sentence-transformers>=2.2.0
+torch>=2.0.0  # CPU version is fine
+
+# Text Processing
+tiktoken>=0.5.0
+
+# HTTP for Ollama
+requests>=2.31.0
+
+# Environment
+python-dotenv>=1.0.0
+
+# Testing
+pytest>=7.4.0

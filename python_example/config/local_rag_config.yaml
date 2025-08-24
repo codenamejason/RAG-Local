@@ -1,0 +1,211 @@
+# Local RAG Configuration
+# All settings for zero-cost RAG operation
+
+# Ollama Configuration
+ollama:
+  base_url: "http://localhost:11434"
+  
+  # Embedding model options (in order of recommendation)
+  embedding_models:
+    - name: "nomic-embed-text"
+      dimensions: 768
+      description: "Best quality/size ratio"
+      size: "274MB"
+    
+    - name: "mxbai-embed-large"
+      dimensions: 1024
+      description: "Highest quality"
+      size: "670MB"
+    
+    - name: "all-minilm"
+      dimensions: 384
+      description: "Fastest, smallest"
+      size: "45MB"
+  
+  # LLM model options by RAM
+  llm_models:
+    2gb:
+      - name: "tinyllama"
+        size: "637MB"
+        context: 2048
+        description: "Ultra-fast, lightweight model for development"
+    
+    4gb:
+      - name: "phi"
+        size: "1.6GB"
+        context: 2048
+        description: "Microsoft Phi-2, fast and decent"
+    
+    8gb:
+      - name: "mistral:7b"
+        size: "4.1GB"
+        context: 8192
+        description: "Excellent balance of speed and quality"
+      
+      - name: "deepseek-coder:6.7b"
+        size: "3.8GB"
+        context: 16384
+        description: "Best for code-heavy RAG"
+    
+    16gb:
+      - name: "llama2:13b"
+        size: "7.4GB"
+        context: 4096
+        description: "High quality responses"
+      
+      - name: "codellama:13b"
+        size: "7.4GB"
+        context: 16384
+        description: "Excellent for technical content"
+    
+    32gb:
+      - name: "mixtral:8x7b"
+        size: "26GB"
+        context: 32768
+        description: "State-of-the-art quality"
+      
+      - name: "solar:10.7b"
+        size: "6.1GB"
+        context: 4096
+        description: "Great quality, faster than mixtral"
+
+# LanceDB Configuration
+lancedb:
+  data_dir: "./data/lancedb"
+  
+  # Index settings for performance
+  index:
+    type: "IVF_PQ"  # Inverted File with Product Quantization
+    num_partitions: 256
+    num_sub_vectors: 96
+    metric: "L2"  # or "cosine"
+    nprobes: 20  # Number of partitions to search
+  
+  # Table settings
+  table:
+    version_control: true
+    auto_compact: true
+    compact_threshold: 10  # Compact after 10 versions
+
+# SentenceTransformers Configuration (Alternative to Ollama)
+sentence_transformers:
+  models:
+    - name: "all-MiniLM-L6-v2"
+      dimensions: 384
+      max_seq_length: 256
+      description: "Fast and good for general text"
+    
+    - name: "all-mpnet-base-v2"
+      dimensions: 768
+      max_seq_length: 384
+      description: "Best quality for general text"
+    
+    - name: "multi-qa-MiniLM-L6-cos-v1"
+      dimensions: 384
+      max_seq_length: 512
+      description: "Optimized for Q&A tasks"
+
+# Chunking Configuration
+chunking:
+  default:
+    chunk_size: 512
+    chunk_overlap: 50
+    separators:
+      - "\n\n"  # Paragraphs
+      - "\n"    # Lines
+      - ". "    # Sentences
+      - ", "    # Clauses
+      - " "     # Words
+  
+  markdown:
+    respect_headers: true
+    chunk_size: 512
+    chunk_overlap: 50
+  
+  code:
+    chunk_size: 1024
+    chunk_overlap: 100
+    respect_functions: true
+
+# Cache Configuration
+cache:
+  embeddings:
+    enabled: true
+    directory: "./data/embedding_cache"
+    max_size_mb: 1000
+    ttl_days: 30
+  
+  llm_responses:
+    enabled: false  # Usually not cached
+    directory: "./data/llm_cache"
+    max_size_mb: 500
+    ttl_hours: 24
+
+# Performance Settings
+performance:
+  batch_size: 100
+  max_workers: 4
+  embedding_batch_size: 32
+  search_timeout_seconds: 5
+  generation_timeout_seconds: 30
+
+# Hybrid Search Configuration
+hybrid_search:
+  enabled: true
+  alpha: 0.5  # Balance between vector (0) and keyword (1) search
+  keyword_search:
+    type: "bm25"
+    k1: 1.2
+    b: 0.75
+
+# Reranking Configuration (Optional)
+reranking:
+  enabled: false
+  model: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+  top_k: 10  # Rerank top 10 results
+
+# Fallback Configuration
+fallback:
+  # If local models fail, optionally fall back to APIs
+  use_api_fallback: false
+  api_providers:
+    - "openai"
+    - "anthropic"
+  
+  # Conditions for fallback
+  triggers:
+    - "model_not_found"
+    - "out_of_memory"
+    - "timeout"
+
+# Monitoring
+monitoring:
+  log_level: "INFO"
+  log_file: "./logs/local_rag.log"
+  metrics:
+    track_latency: true
+    track_token_usage: true
+    track_cache_hits: true
+
+# System Requirements
+system_requirements:
+  minimum:
+    ram_gb: 8
+    disk_gb: 20
+    cpu_cores: 4
+  
+  recommended:
+    ram_gb: 16
+    disk_gb: 50
+    cpu_cores: 8
+    gpu: "optional"
+
+# Model Download URLs (for reference)
+model_sources:
+  ollama:
+    registry: "https://registry.ollama.ai"
+    models: "https://ollama.ai/library"
+  
+  huggingface:
+    models: "https://huggingface.co/models"
+    sentence_transformers: "https://huggingface.co/sentence-transformers"

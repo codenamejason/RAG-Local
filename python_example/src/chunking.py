@@ -7,7 +7,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class Chunk:
     """Represents a document chunk."""
