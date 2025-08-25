@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.coverage
+*.log
+
+# TypeScript/Node
+node_modules/
+dist/
+build/
+*.js.map
+*.d.ts
+.npm
+.yarn
+package-lock.json
+yarn.lock
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Data
+data/
+*.db
+*.sqlite
+*.lance
+*.arrow
+
+# Models (large files)
+models/
+*.gguf
+*.bin
+*.onnx
+
+# Notebooks
+.ipynb_checkpoints/
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Project specific
+*/data/lancedb/
+*/data/chroma/
+*/data/cache/
+*/logs/
+*.tmp
