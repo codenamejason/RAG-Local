@@ -21,12 +21,12 @@ Full-featured local RAG with:
 
 [See Python README](./python_example/README.md)
 
-### 📁 `typescript_example/` - TypeScript RAG (Coming Soon)
+### 📁 `typescript_example/` - TypeScript RAG
 Modern TypeScript implementation with:
-- **LLM**: Ollama via REST API
-- **Embeddings**: Transformers.js (runs in browser!)
-- **Vector Store**: VectorDB.js or LanceDB Node
-- **Status**: 🚧 **In Development**
+- **LLM**: Ollama (TinyLlama by default)
+- **Embeddings**: Ollama (nomic-embed-text)
+- **Vector Store**: In-memory (extensible to LanceDB)
+- **Status**: ✅ **Production Ready**
 
 ## Quick Start
 
