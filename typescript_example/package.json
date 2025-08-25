@@ -1,0 +1,38 @@
+{
+  "name": "@local-rag/typescript",
+  "version": "1.0.0",
+  "description": "Pure local RAG system in TypeScript - Zero cost, complete privacy",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "tsx watch src/example.ts",
+    "build": "tsc",
+    "test": "tsx src/test.ts",
+    "start": "node dist/example.js",
+    "clean": "rm -rf dist",
+    "demo": "tsx src/demo.ts"
+  },
+  "keywords": [
+    "rag",
+    "local",
+    "llm",
+    "embeddings",
+    "vector-database",
+    "ollama",
+    "zero-cost",
+    "privacy"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "vectordb": "^0.5.0",
+    "ollama": "^0.5.0",
+    "@xenova/transformers": "^2.17.0",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "tsx": "^4.7.0"
+  }
+}
