@@ -1,241 +1,228 @@
-# TypeScript Local RAG
+# TypeScript Local RAG System
 
-**100% Local | Zero Cost | Complete Privacy | Modern TypeScript**
+**100% Local • Zero Cost • Complete Privacy • Type Safe**
 
-A pure TypeScript implementation of RAG that runs entirely on your machine. No API keys, no cloud services, no monthly bills.
+A modern TypeScript implementation of Retrieval-Augmented Generation (RAG) that runs entirely on your machine. Built with type safety and developer experience in mind.
 
-## Features
+## 🚀 Quick Start
 
-- ✅ **Pure TypeScript** - Type-safe, modern, clean
-- ✅ **Zero Dependencies** on cloud services
-- ✅ **Ollama Integration** - Local LLMs and embeddings
-- ✅ **Simple Vector Store** - In-memory for demos (upgrade to VectorDB for production)
-- ✅ **Text Chunking** - Smart document splitting
-- ✅ **Cost Tracking** - Always shows $0.00
+### Prerequisites
+- Node.js 18+
+- 4GB+ RAM (8GB recommended)
+- Windows, macOS, or Linux
 
-## Quick Start
+### Setup
 
-### 1. Install Ollama
+1. **Install Ollama:**
+   ```bash
+   # Download from https://ollama.ai
+   # Or use: curl -fsSL https://ollama.ai/install.sh | sh
+   ```
 
-```bash
-# Windows
-winget install Ollama.Ollama
+2. **Pull Models:**
+   ```bash
+   ollama pull tinyllama
+   ollama pull nomic-embed-text
+   ```
 
-# Mac
-brew install ollama
+3. **Install & Run:**
+   ```bash
+   npm install
+   npm test     # Run tests
+   npm run dev  # Run example
+   ```
 
-# Linux
-curl -fsSL https://ollama.ai/install.sh | sh
-```
+That's it! No API keys needed.
 
-### 2. Start Ollama & Get Models
+## 💻 Usage
 
-```bash
-# Start Ollama service
-ollama serve
-
-# In another terminal, pull models
-ollama pull tinyllama        # LLM (637MB)
-ollama pull nomic-embed-text  # Embeddings (274MB)
-```
-
-### 3. Install & Run
-
-```bash
-# Clone and enter directory
-cd typescript_example
-
-# Install dependencies
-npm install
-
-# Run tests
-npm test
-
-# Run demo
-npm run dev
-```
-
-## Usage
-
+### Basic Example
 ```typescript
-import { LocalRAG } from '@local-rag/typescript';
+import { LocalRAGPipeline } from "./src/rag-pipeline";
 
 // Initialize
-const rag = new LocalRAG({
-  llmModel: 'tinyllama:latest',
-  chunkSize: 500
-});
+const rag = new LocalRAGPipeline();
 
 // Check system
-const ready = await rag.isReady();
+if (!await rag.checkSystem()) {
+  console.error("Ollama not running!");
+  process.exit(1);
+}
 
 // Add documents
 await rag.addDocuments([
-  'Your document text here...',
-  'Another document...'
+  "TypeScript adds static typing to JavaScript.",
+  "RAG combines retrieval with generation."
 ]);
 
 // Query
-const response = await rag.query('Your question?');
+const response = await rag.query("What is TypeScript?");
 console.log(response.answer);
-console.log(`Cost: $${response.totalCost}`); // Always $0.00!
 ```
 
-## API
-
-### `LocalRAG`
-
-Main class for the RAG pipeline.
-
-```typescript
-const rag = new LocalRAG({
-  llmModel?: string,        // Default: 'tinyllama:latest'
-  embeddingModel?: string,  // Default: 'nomic-embed-text:latest'
-  chunkSize?: number,       // Default: 500
-  chunkOverlap?: number,    // Default: 50
-  baseUrl?: string         // Default: 'http://localhost:11434'
-});
+### Interactive Demo
+```bash
+npm run dev
 ```
 
-### Methods
-
-- `isReady()` - Check if Ollama is running with required models
-- `addDocuments(texts: string[])` - Add documents to knowledge base
-- `query(question: string, topK?: number)` - Query the RAG system
-- `clear()` - Clear the knowledge base
-- `getStats()` - Get system statistics
-
-## Architecture
-
-```
-Your App
-    ↓
-LocalRAG
-    ├── OllamaClient (LLM + Embeddings)
-    ├── TextChunker (Document splitting)
-    └── VectorStore (Similarity search)
-    
-All Local → Zero API Calls → $0.00 Cost
-```
-
-## Models
-
-### Recommended by RAM
-
-| RAM | LLM Model | Quality | Speed |
-|-----|-----------|---------|-------|
-| 4GB | tinyllama | Basic | Fast |
-| 8GB | mistral | Good | Good |
-| 16GB | llama2:13b | Great | Moderate |
-| 32GB+ | mixtral | Best | Slower |
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 typescript_example/
-├── src/
-│   ├── index.ts           # Main exports
-│   ├── rag-pipeline.ts    # RAG orchestration
-│   ├── ollama-client.ts   # Ollama interface
-│   ├── vector-store.ts    # Vector storage
-│   ├── chunker.ts         # Text chunking
-│   ├── example.ts         # Demo script
-│   └── test.ts           # Test suite
-├── package.json
-├── tsconfig.json
-└── README.md
+├── src/                   # Core implementation
+│   ├── rag-pipeline.ts   # Main RAG orchestration
+│   ├── ollama-client.ts  # Ollama API client
+│   ├── vector-store.ts   # In-memory vector DB
+│   ├── chunker.ts        # Text chunking
+│   ├── example.ts        # Usage example
+│   ├── test.ts          # Test suite
+│   └── index.ts         # Package exports
+├── docs/                 # Documentation
+│   └── architecture.md   # System design
+├── package.json         # Dependencies
+├── tsconfig.json       # TypeScript config
+├── .eslintrc.js       # Linting rules
+└── .prettierrc        # Code formatting
 ```
 
-## Scripts
+## 🎯 Features
 
-- `npm run dev` - Run example with hot reload
-- `npm test` - Run test suite
-- `npm run build` - Build to JavaScript
-- `npm start` - Run built version
-- `npm run demo` - Run interactive demo
+- **Type Safe**: Full TypeScript with strict mode
+- **Zero Dependencies**: Only dev dependencies for tooling
+- **Fast**: Optimized for local inference
+- **Clean API**: Simple, intuitive interfaces
+- **Well Tested**: Comprehensive test coverage
+- **Modern**: ES2022, async/await, latest Node.js
 
-## Environment Variables
+## 🔧 Configuration
 
 Optional `.env` file:
-
 ```env
 OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_LLM_MODEL=tinyllama:latest
 OLLAMA_EMBEDDING_MODEL=nomic-embed-text:latest
+CHUNK_SIZE=500
+CHUNK_OVERLAP=50
 ```
 
-## Troubleshooting
+## 📊 Model Options
 
-### Ollama not found
+| RAM | Model | Quality | Speed |
+|-----|-------|---------|-------|
+| 4GB | tinyllama | Good | Fast |
+| 8GB | mistral | Better | Good |
+| 16GB | llama2:13b | Great | Moderate |
+| 32GB+ | mixtral | Best | Slower |
+
+## 🧪 Development
+
+### Scripts
 ```bash
-# Check if running
-curl http://localhost:11434
+npm run dev      # Run with hot reload
+npm test         # Run tests
+npm run build    # Build to JavaScript
+npm start        # Run production build
+npm run lint     # Check code quality
+npm run lint:fix # Auto-fix issues
+npm run format   # Format with Prettier
+npm run check    # Lint, build, and test
+```
 
-# Start it
+### Code Quality
+- ESLint for linting
+- Prettier for formatting
+- TypeScript strict mode
+- No `any` types
+
+## 📚 API Reference
+
+### LocalRAGPipeline
+```typescript
+class LocalRAGPipeline {
+  constructor(options?: RAGOptions);
+  checkSystem(): Promise<boolean>;
+  addDocuments(documents: string[]): Promise<void>;
+  query(question: string, k?: number): Promise<QueryResult>;
+  clear(): void;
+  getStats(): Record<string, string | number>;
+}
+```
+
+### OllamaClient
+```typescript
+class OllamaClient {
+  constructor(options?: OllamaOptions);
+  isRunning(): Promise<boolean>;
+  listModels(): Promise<string[]>;
+  generate(prompt: string): Promise<string>;
+  embed(text: string): Promise<number[]>;
+}
+```
+
+### VectorStore
+```typescript
+class VectorStore {
+  addDocuments(documents: Document[]): Promise<void>;
+  search(embedding: number[], k: number): Promise<SearchResult[]>;
+  clear(): void;
+  count(): number;
+}
+```
+
+## 🛠️ Extending
+
+### Custom Embeddings
+```typescript
+interface EmbeddingProvider {
+  embed(text: string): Promise<number[]>;
+  embedBatch(texts: string[]): Promise<number[][]>;
+}
+```
+
+### Custom Vector Store
+```typescript
+interface VectorStore {
+  addDocuments(docs: Document[]): Promise<void>;
+  search(query: number[], k: number): Promise<SearchResult[]>;
+}
+```
+
+## 🆘 Troubleshooting
+
+### Ollama not running?
+```bash
+# Start Ollama
 ollama serve
+
+# Check status
+curl http://localhost:11434/api/tags
 ```
 
-### Models not found
+### TypeScript errors?
 ```bash
-# List models
-ollama list
+# Check types
+npx tsc --noEmit
 
-# Pull required models
-ollama pull tinyllama
-ollama pull nomic-embed-text
+# Fix linting
+npm run lint:fix
 ```
 
-### TypeScript errors
-```bash
-# Clean and rebuild
-npm run clean
-npm run build
-```
+## 📄 License
 
-## Production Considerations
+MIT License - Use freely in your projects!
 
-This is a demo implementation. For production:
+## 🌟 Why TypeScript RAG?
 
-1. **Vector Store**: Replace in-memory store with:
-   - VectorDB for browser/edge
-   - LanceDB for Node.js
-   - PostgreSQL with pgvector
+- **Type Safety**: Catch errors at compile time
+- **Better IDE Support**: IntelliSense, refactoring
+- **Modern JavaScript**: Latest ES features
+- **Clean Architecture**: Interfaces and modules
+- **Fast Development**: Hot reload with tsx
 
-2. **Embeddings**: Consider:
-   - Transformers.js for browser (ONNX models)
-   - Keep Ollama for server-side
+## 📖 Documentation
 
-3. **Caching**: Add:
-   - Embedding cache
-   - LLM response cache
-
-4. **Error Handling**: Add:
-   - Retry logic
-   - Fallback models
-   - Better error messages
-
-## Comparison
-
-| Feature | Cloud RAG | Our Local RAG |
-|---------|-----------|---------------|
-| Cost | $100-1000/mo | $0.00 |
-| Privacy | ❌ None | ✅ Complete |
-| Internet | Required | Not needed |
-| Speed | Variable | Consistent |
-| Control | Limited | Total |
-
-## Contributing
-
-Keep it:
-- Local (no cloud APIs)
-- Free (no paid services)
-- Simple (minimal dependencies)
-- Type-safe (proper TypeScript)
-
-## License
-
-MIT - Use it, modify it, ship it. Keep it free.
+- [Architecture](docs/architecture.md) - System design and patterns
 
 ---
 
-**Built with TypeScript and a hatred for API bills.**
+Built with 🚀 TypeScript for the modern developer
