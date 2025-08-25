@@ -10,7 +10,11 @@
     "test": "tsx src/test.ts",
     "start": "node dist/example.js",
     "clean": "rm -rf dist",
-    "demo": "tsx src/demo.ts"
+    "demo": "tsx src/demo.ts",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "check": "npm run lint && npm run build && npm test"
   },
   "keywords": [
     "rag",
@@ -25,14 +29,21 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "vectordb": "^0.5.0",
-    "ollama": "^0.5.0",
     "@xenova/transformers": "^2.17.0",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "ollama": "^0.5.0",
+    "vectordb": "^0.5.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.34.0",
     "@types/node": "^20.11.0",
-    "typescript": "^5.3.3",
-    "tsx": "^4.7.0"
+    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@typescript-eslint/parser": "^8.40.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.6.2",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
   }
 }

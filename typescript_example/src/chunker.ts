@@ -10,7 +10,7 @@ export interface ChunkOptions {
 export interface Chunk {
   text: string;
   index: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string | number | boolean>;
 }
 
 export class TextChunker {
@@ -28,24 +28,24 @@ export class TextChunker {
   chunk(text: string): Chunk[] {
     const chunks: Chunk[] = [];
     const words = text.split(/\s+/);
-    
+
     for (let i = 0; i < words.length; i += this.chunkSize - this.chunkOverlap) {
       const chunkWords = words.slice(i, i + this.chunkSize);
       if (chunkWords.length > 0) {
         chunks.push({
-          text: chunkWords.join(' '),
+          text: chunkWords.join(" "),
           index: chunks.length,
           metadata: {
             startIndex: i,
-            wordCount: chunkWords.length
-          }
+            wordCount: chunkWords.length,
+          },
         });
       }
-      
+
       // Stop if we've processed all words
       if (i + this.chunkSize >= words.length) break;
     }
-    
+
     return chunks;
   }
 
@@ -54,18 +54,18 @@ export class TextChunker {
    */
   chunkTexts(texts: string[]): Chunk[] {
     const allChunks: Chunk[] = [];
-    
+
     for (let i = 0; i < texts.length; i++) {
       const chunks = this.chunk(texts[i]);
-      chunks.forEach(chunk => {
+      chunks.forEach((chunk) => {
         chunk.metadata = {
           ...chunk.metadata,
-          documentIndex: i
+          documentIndex: i,
         };
         allChunks.push(chunk);
       });
     }
-    
+
     return allChunks;
   }
 }

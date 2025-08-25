@@ -26,8 +26,8 @@ export class OllamaClient {
   private model: string;
 
   constructor(options: OllamaOptions = {}) {
-    this.baseUrl = options.baseUrl || 'http://localhost:11434';
-    this.model = options.model || 'tinyllama:latest';
+    this.baseUrl = options.baseUrl || "http://localhost:11434";
+    this.model = options.model || "tinyllama:latest";
   }
 
   /**
@@ -48,8 +48,8 @@ export class OllamaClient {
   async listModels(): Promise<string[]> {
     try {
       const response = await fetch(`${this.baseUrl}/api/tags`);
-      const data = await response.json();
-      return data.models?.map((m: any) => m.name) || [];
+      const data = (await response.json()) as { models?: { name: string }[] };
+      return data.models?.map((m) => m.name) || [];
     } catch {
       return [];
     }
@@ -58,23 +58,23 @@ export class OllamaClient {
   /**
    * Generate text with LLM
    */
-  async generate(prompt: string, options: any = {}): Promise<string> {
+  async generate(prompt: string, options: Record<string, unknown> = {}): Promise<string> {
     const response = await fetch(`${this.baseUrl}/api/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         model: this.model,
         prompt,
         stream: false,
-        ...options
-      })
+        ...options,
+      }),
     });
 
     if (!response.ok) {
       throw new Error(`Ollama generate failed: ${response.statusText}`);
     }
 
-    const data: GenerateResponse = await response.json();
+    const data = (await response.json()) as GenerateResponse;
     return data.response;
   }
 
@@ -83,19 +83,19 @@ export class OllamaClient {
    */
   async embed(text: string): Promise<number[]> {
     const response = await fetch(`${this.baseUrl}/api/embeddings`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: 'nomic-embed-text:latest',
-        prompt: text
-      })
+        model: "nomic-embed-text:latest",
+        prompt: text,
+      }),
     });
 
     if (!response.ok) {
       throw new Error(`Ollama embed failed: ${response.statusText}`);
     }
 
-    const data: EmbeddingResponse = await response.json();
+    const data = (await response.json()) as EmbeddingResponse;
     return data.embedding;
   }
 
@@ -103,9 +103,7 @@ export class OllamaClient {
    * Generate embeddings for multiple texts
    */
   async embedBatch(texts: string[]): Promise<number[][]> {
-    const embeddings = await Promise.all(
-      texts.map(text => this.embed(text))
-    );
+    const embeddings = await Promise.all(texts.map((text) => this.embed(text)));
     return embeddings;
   }
 }
